@@ -78,7 +78,7 @@ function reloadFile(file:string, file2: string) {
 
 function initFileWatch() {
 	const regxPath = rootPath + "\\cocosstudio\\ui\\**\\*.csd"
-	watcher = watch(regxPath, { ignoreInitial: true, ignored: /.+PList\.Dir/, depth: 1 }).on('all', (ev, p) => {
+	watcher = watch(regxPath, { ignoreInitial: true, ignored: /.+PList\.Dir/, depth: 1 }).on('change', (p) => {
 		const cmd = 'D:\\threeking\\trunk\\client\\client_jp\\csdToLua\\single.bat'
 
 		const filename = path.basename(p)
@@ -116,7 +116,7 @@ function packUI(name: string) {
 function initSocket() {
 	child = fork(path.join(__dirname, 'ipc-child.js'))
 	child.on('message', (m) => {
-		if (m === 'new client try to connect, refused' || m === 'ERROR no client found') vscode.window.showErrorMessage(m)
+		if (m === 'new client try to connect, refused' || m === 'ERROR no client found') vscode.window.showWarningMessage(m)
 		else if (m.includes('new client connected')) vscode.window.showInformationMessage(m)
 		cb && cb(m)
 	})
